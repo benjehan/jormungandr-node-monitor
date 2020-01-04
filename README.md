@@ -1,5 +1,3 @@
-FORKED FROM BOBDOBS/CARDANO-SCRIPTS. THANKS BUDDY.
-
 ## MY PRETTY MONITORING SCRIPT WITH LOGGING
 
 Thanks to [bobdobs](https://github.com/bobdobs/cardano-scripts) for making this script. I've taken his work and added my own something-something to it to make it work "better" and look "prettier".
