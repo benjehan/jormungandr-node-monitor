@@ -6,7 +6,7 @@ Thanks to [bobdobs](https://github.com/bobdobs/cardano-scripts) for making this 
 
 You need to put Jormungandr into your path so you can just type "jormungandr" anywhere to run it. To do that you need to edit your **.profile** file in your home directory.
 
-`export PATH=$PATH:/path/to/jormungandr`
+`export PATH=$PATH:/path/to/jormungandr:/path/to/jcli`
 
 ### STEP 2: SETUP JORMUNGANDR SERVICE
 
