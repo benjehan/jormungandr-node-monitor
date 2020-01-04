@@ -10,7 +10,7 @@ You need to put Jormungandr into your path so you can just type "jormungandr" an
 
 ### STEP 2: SETUP JORMUNGANDR SERVICE
 
-First you need to setup Jormungandr to run as a service. You want to do this because if your node becomes unresponsive, using the JCLI to connect and shutdown the node is not going to work. You won't be able to rest your node.
+First you need to setup Jormungandr to run as a service. You want to do this because if your node becomes unresponsive, using the JCLI to connect and shutdown the node is not going to work. You won't be able to reset your node.
 
 If your system uses **systemctl** to start and stop services, then you'll need to edit the file: **/etc/systemd/system/jorg.service** (you will want to create the file jorg.service, it doesn't exist. And we're calling it 'jorg' because its easy to remember and quick to type).
 
