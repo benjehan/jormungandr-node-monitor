@@ -44,7 +44,7 @@ Next, youll need to do: **sudo visudo -f /etc/sudoers.d/YOURUSERNAME** This is g
 
 ### STEP 4: MONITORING & LOGGING
 
-The script outputs to the screen and runs in a loop. It also outputs the same info to a log file so you can review it later. You will want to edit the **${LOG_FILE}** variable to set where to store your logs. The script will run until you stop it.
+Copy the script to /bin or somewhere in your path. The script outputs to the screen and runs in a loop. It also outputs the same info to a log file so you can review it later. You will want to edit the **${LOG_FILE}** variable to set where to store your logs. The script will run until you stop it.
 
 Here is a sample of the output: 
 
