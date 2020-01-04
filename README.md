@@ -1,33 +1,58 @@
-# cardano-scripts
-Bash scripts for Cardano stake pool operators.
+FORKED FROM BOBDOBS/CARDANO-SCRIPTS. THANKS BUDDY.
 
-## Get stuck nodes unstuck
-`stuck_node_mon.sh` restarts stuck jormungandr v0.8.5 (and below) nodes. Hopefully it will soon 
-become obsolete :-) 
+## MY PRETTY MONITORING SCRIPT WITH LOGGING
 
-stuck_node_mon.sh monitors jormungander blocks. If jormungandr is running and there are no new 
-blocks for +360 seconds the script will restart jormungandr. The script is running in an infinite loop.
+Thanks to [bobdobs](https://github.com/bobdobs/cardano-scripts) for making this script. I've taken his work and added my own something-something to it to make it work "better" and look "prettier".
 
-The script is tailored to my own environment, but it can easily be altered.  
+### STEP 1: PUT JORMUNGANDR IN YOUR PATH
 
-I use linux screen to run jormungandr in the background. The screen I use to run jormungandr is simply 
-called "ada". jcli is used to shut down jormungandr cleanly. jormungandr (in the 
-"ada" screen) is then restarted by calling the bash script I use to start the 
-pool: `screen -S ada -X stuff "./jmg_start_pool.sh^M"`  
+You need to put Jormungandr into your path so you can just type "jormungandr" anywhere to run it. To do that you need to edit your **.profile** file in your home directory.
 
-### Configuration
+`export PATH=$PATH:/path/to/jormungandr`
+
+### STEP 2: SETUP JORMUNGANDR SERVICE
+
+First you need to setup Jormungandr to run as a service. You want to do this because if your node becomes unresponsive, using the JCLI to connect and shutdown the node is not going to work. You won't be able to rest your node.
+
+If your system uses **systemctl** to start and stop services, then you'll need to edit the file: **/etc/systemd/system/jorg.service** (you will want to create the file jorg.service, it doesn't exist. And we're calling it 'jorg' because its easy to remember and quick to type).
+
 ```
-export PATH=$PATH:/home/uruncle/.cargo/bin
-JCLI="jcli"
-JCLI_PORT=3100
-LAST_BLOCK=""
-RESTART_GT=360
+[Unit]
+Description=Jormungandr
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=jormungandr --config /path/to/config-file --genesis-block-hash replacethiswithgenesisblockhash --secret /path/to/node-secret-key
+
+LimitNOFILE=16384
+
+Restart=on-failure
+RestartSec=5s
+User=YOURUSERNAME
+Group=YOURUSERSGROUP
+
+[Install]
+WantedBy=multi-user.target
 ```
 
-### My pool
-My pool is now running stable, so currently I am not having issues with stuck Jormungandr or forks. 
-I roughly followed this guide: https://gist.github.com/ilap/54027fe9af0513c2701dc556221198b2 
-(updated linux network settings and tweaked Jormungandr configuration).  
+Once thats done you need to reload the changes: **systemctl daemon-reload && systemctl enable jorg && systemctl start jorg**
 
-If you find this useful please support my pool: https://adage.app
+### STEP 3: MONITORING & LOGGING
 
+The script outputs to the screen and runs in a loop. It also outputs the same info to a log file so you can review it later. You will want to edit the **${LOG_FILE}** variable to set where to store your logs. The script will run until you stop it.
+
+Here is a sample of the output: 
+
+DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK #
+
+```
+2020-01-04 | Epoch: 21 | Slot: 39334 | Explorer: 17:04:45 | Local: 17:05:00 | Block: 70783
+2020-01-04 | Epoch: 21 | Slot: 39377 | Explorer: 17:06:11 | Local: 17:06:20 | Block: 70784
+2020-01-04 | Epoch: 21 | Slot: 39397 | Explorer: 17:06:51 | Local: 17:07:00 | Block: 70786
+2020-01-04 | Epoch: 21 | Slot: 39410 | Explorer: 17:07:17 | Local: 17:07:20 | Block: 70787
+2020-01-04 | Epoch: 21 | Slot: 39422 | Explorer: 17:07:41 | Local: 17:08:00 | Block: 70788
+2020-01-04 | Epoch: 21 | Slot: 39435 | Explorer: 17:08:07 | Local: 17:08:21 | Block: 70790
+2020-01-04 | Epoch: 21 | Slot: 39445 | Explorer: 17:08:27 | Local: 17:08:41 | Block: 70791
+2020-01-04 | Epoch: 21 | Slot: 39458 | Explorer: 17:08:53 | Local: 17:09:01 | Block: 70792
+```
