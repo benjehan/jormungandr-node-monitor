@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Created by Uruncle @ https://adage.app Cardano Stake Pool
+# Created by: Uruncle @ https://adage.app Cardano Stake Pool
 # Updated by: Dogpatch Media @ https://coconutpool.com
 #
 # Disclaimer:
