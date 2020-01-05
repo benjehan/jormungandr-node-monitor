@@ -51,7 +51,7 @@ Here is a sample of the output:
 DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK HEIGHT | BLOCK COUNT SINCE RESTART
 
 ```
-2020-01-05 | Epoch: 22 | Slot: 40702 | Explorer: 17:50:21 | Local: 17:50:36 | Block: 73502 | Count: 2                       2020-01-05 | Epoch: 22 | Slot: 40735 | Explorer: 17:51:27 | Local: 17:51:36 | Block: 73503 | Count: 3
+
 2020-01-05 | Epoch: 22 | Slot: 40742 | Explorer: 17:51:41 | Local: 17:51:56 | Block: 73504 | Count: 4
 2020-01-05 | Epoch: 22 | Slot: 40761 | Explorer: 17:52:19 | Local: 17:52:36 | Block: 73505 | Count: 5
 2020-01-05 | Epoch: 22 | Slot: 40768 | Explorer: 17:52:33 | Local: 17:52:56 | Block: 73506 | Count: 6
