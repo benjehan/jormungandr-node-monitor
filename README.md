@@ -48,7 +48,7 @@ Copy the script to /bin or somewhere in your path. The script outputs to the scr
 
 Here is a sample of the output: 
 
-DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK # | BLOCK COUNT
+DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK HEIGHT | BLOCK COUNT SINCE RESTART
 
 ```
 2020-01-05 | Epoch: 22 | Slot: 40702 | Explorer: 17:50:21 | Local: 17:50:36 | Block: 73502 | Count: 2                       2020-01-05 | Epoch: 22 | Slot: 40735 | Explorer: 17:51:27 | Local: 17:51:36 | Block: 73503 | Count: 3
