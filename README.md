@@ -51,13 +51,11 @@ Here is a sample of the output:
 DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK # | BLOCK COUNT
 
 ```
-2020-01-05 | Epoch: 22 | Slot: 37840 | Explorer: 16:14:57 | Local: 16:15:32 | Block: 73335 | Count: 338
-2020-01-05 | Epoch: 22 | Slot: 37840 | Explorer: 16:14:57 | Local: 16:15:52 | Block: 73335 | Count: 338
-2020-01-05 | Epoch: 22 | Slot: 37872 | Explorer: 16:16:01 | Local: 16:16:12 | Block: 73337 | Count: 344
-2020-01-05 | Epoch: 22 | Slot: 37885 | Explorer: 16:16:27 | Local: 16:16:32 | Block: 73338 | Count: 347
-2020-01-05 | Epoch: 22 | Slot: 37885 | Explorer: 16:16:27 | Local: 16:16:52 | Block: 73338 | Count: 347
-2020-01-05 | Epoch: 22 | Slot: 37885 | Explorer: 16:16:27 | Local: 16:17:12 | Block: 73338 | Count: 347
-2020-01-05 | Epoch: 22 | Slot: 37912 | Explorer: 16:17:21 | Local: 16:17:32 | Block: 73340 | Count: 352
-2020-01-05 | Epoch: 22 | Slot: 37919 | Explorer: 16:17:35 | Local: 16:17:53 | Block: 73341 | Count: 353
+2020-01-05 | Epoch: 22 | Slot: 40702 | Explorer: 17:50:21 | Local: 17:50:36 | Block: 73502 | Count: 2                       2020-01-05 | Epoch: 22 | Slot: 40735 | Explorer: 17:51:27 | Local: 17:51:36 | Block: 73503 | Count: 3
+2020-01-05 | Epoch: 22 | Slot: 40742 | Explorer: 17:51:41 | Local: 17:51:56 | Block: 73504 | Count: 4
+2020-01-05 | Epoch: 22 | Slot: 40761 | Explorer: 17:52:19 | Local: 17:52:36 | Block: 73505 | Count: 5
+2020-01-05 | Epoch: 22 | Slot: 40768 | Explorer: 17:52:33 | Local: 17:52:56 | Block: 73506 | Count: 6
+2020-01-05 | Epoch: 22 | Slot: 40787 | Explorer: 17:53:11 | Local: 17:53:16 | Block: 73508 | Count: 7
+2020-01-05 | Epoch: 22 | Slot: 40799 | Explorer: 17:53:35 | Local: 17:53:36 | Block: 73511 | Count: 8
 
 ```
