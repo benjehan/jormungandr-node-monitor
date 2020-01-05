@@ -35,6 +35,7 @@ while true
 do
     DATE=$(date '+%Y-%m-%d')
     TIME=$(date '+%H:%M:%S')
+    BLOCK_COUNT=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep blockRecvCnt | awk '{print $2}')
     LATEST_BLOCK=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockHeight | awk '{print $2}' | rev | cut -c 2- | rev | cut -c 2-)
     LATEST_SLOT=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockDate | awk '{print $2}' | rev | cut -c 2- | rev | cut -c 5- )
     LAST_BLOCK_TIME=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockTime | awk '{print $2}' | cut -c 13- | rev | cut -c 8- | rev)
@@ -42,8 +43,8 @@ do
     if [ "$LATEST_BLOCK" > 0 ]; then
         if [ "$LATEST_BLOCK" != "$LAST_BLOCK" ]; then
             START_TIME=$(($SECONDS))
-            echo "${DATE} | Epoch: ${EPOCH} | Slot: ${LATEST_SLOT} | Explorer: ${LAST_BLOCK_TIME} | Local: ${TIME} | Block: ${LATEST_BLOCK}"
-            echo "${DATE} | Epoch: ${EPOCH} | Slot: ${LATEST_SLOT} | Explorer: ${LAST_BLOCK_TIME} | Local: ${TIME} | Block: ${LATEST_BLOCK}" >> ${LOG_FILE}
+            echo "${DATE} | Epoch: ${EPOCH} | Slot: ${LATEST_SLOT} | Explorer: ${LAST_BLOCK_TIME} | Local: ${TIME} | Block: ${LATEST_BLOCK} | Count: ${BLOCK_COUNT}"
+            echo "${DATE} | Epoch: ${EPOCH} | Slot: ${LATEST_SLOT} | Explorer: ${LAST_BLOCK_TIME} | Local: ${TIME} | Block: ${LATEST_BLOCK} | Count: ${BLOCK_COUNT}" >> ${LOG_FILE}
             LAST_BLOCK="$LATEST_BLOCK"
         else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
