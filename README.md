@@ -48,15 +48,16 @@ Copy the script to /bin or somewhere in your path. The script outputs to the scr
 
 Here is a sample of the output: 
 
-DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK #
+DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK # | BLOCK COUNT
 
 ```
-2020-01-04 | Epoch: 21 | Slot: 39334 | Explorer: 17:04:45 | Local: 17:05:00 | Block: 70783
-2020-01-04 | Epoch: 21 | Slot: 39377 | Explorer: 17:06:11 | Local: 17:06:20 | Block: 70784
-2020-01-04 | Epoch: 21 | Slot: 39397 | Explorer: 17:06:51 | Local: 17:07:00 | Block: 70786
-2020-01-04 | Epoch: 21 | Slot: 39410 | Explorer: 17:07:17 | Local: 17:07:20 | Block: 70787
-2020-01-04 | Epoch: 21 | Slot: 39422 | Explorer: 17:07:41 | Local: 17:08:00 | Block: 70788
-2020-01-04 | Epoch: 21 | Slot: 39435 | Explorer: 17:08:07 | Local: 17:08:21 | Block: 70790
-2020-01-04 | Epoch: 21 | Slot: 39445 | Explorer: 17:08:27 | Local: 17:08:41 | Block: 70791
-2020-01-04 | Epoch: 21 | Slot: 39458 | Explorer: 17:08:53 | Local: 17:09:01 | Block: 70792
+2020-01-05 | Epoch: 22 | Slot: 37840 | Explorer: 16:14:57 | Local: 16:15:32 | Block: 73335 | Count: 338
+2020-01-05 | Epoch: 22 | Slot: 37840 | Explorer: 16:14:57 | Local: 16:15:52 | Block: 73335 | Count: 338
+2020-01-05 | Epoch: 22 | Slot: 37872 | Explorer: 16:16:01 | Local: 16:16:12 | Block: 73337 | Count: 344
+2020-01-05 | Epoch: 22 | Slot: 37885 | Explorer: 16:16:27 | Local: 16:16:32 | Block: 73338 | Count: 347
+2020-01-05 | Epoch: 22 | Slot: 37885 | Explorer: 16:16:27 | Local: 16:16:52 | Block: 73338 | Count: 347
+2020-01-05 | Epoch: 22 | Slot: 37885 | Explorer: 16:16:27 | Local: 16:17:12 | Block: 73338 | Count: 347
+2020-01-05 | Epoch: 22 | Slot: 37912 | Explorer: 16:17:21 | Local: 16:17:32 | Block: 73340 | Count: 352
+2020-01-05 | Epoch: 22 | Slot: 37919 | Explorer: 16:17:35 | Local: 16:17:53 | Block: 73341 | Count: 353
+
 ```
