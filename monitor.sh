@@ -35,6 +35,23 @@ START_TIME=$SECONDS
 # how many seconds should we wait if no blocks show up
 RESTART_GT=180
 
+# display output headers
+echo "/////////////////////////////////////////////////////////////////////////////////////"
+echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
+echo "/////////////////////////////////////////////////////////////////////////////////////"
+echo ""
+echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | LAST HASH | COUNTER"
+echo ""
+
+# write headers to log file
+echo "/////////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
+echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////" >> ${LOG_FILE}
+echo "/////////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
+echo ""  >> $LOG_FILE}
+echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | LAST HASH | COUNTER" >> ${LOG_FILE}
+echo ""  >> ${LOG_FILE}
+
+# start the monitoring
 while true
 do  
     
@@ -56,22 +73,25 @@ do
             
             # logging to screen and file
             START_TIME=$(($SECONDS))
-            echo "${DATE} | Epoch: ${EPOCH} | Slot: ${LATEST_SLOT} | Explorer: ${LAST_BLOCK_TIME} | Local: ${TIME} | Block: ${LATEST_BLOCK} | Count: ${BLOCK_COUNT}"
-            echo "${DATE} | Epoch: ${EPOCH} | Slot: ${LATEST_SLOT} | Explorer: ${LAST_BLOCK_TIME} | Local: ${TIME} | Block: ${LATEST_BLOCK} | Count: ${BLOCK_COUNT}" >> ${LOG_FILE}
+            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | 0${LATEST_BLOCK} | ${LAST_HASH} | ${COUNTER}"
+            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | 0${LATEST_BLOCK} | ${LAST_HASH} | ${COUNTER}" >>  ${BLOCK_LOG}
             LAST_BLOCK="$LATEST_BLOCK"
         else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
             if [ "$ELAPSED_TIME" -gt "$RESTART_GT" ]; then
-                # log to screen and file
+               
+               # log to screen and file
                 echo "//////////////////////////////////////////////////////////////////////////////////"
-                echo "${DATE} | ${TIME} | Restarting Jormungandr. | Waited ${ELAPSED_TIME} for block."
+                echo "${DATE} | ${TIME} | Restarting Jormungandr. | Waited ${ELAPSED_TIME} seconds for block."
 
                 echo "//////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
-                echo "${DATE} | ${TIME} | Restarting Jormungandr. | Waited ${ELAPSED_TIME} for block." >> ${LOG_FILE}
+                echo "${DATE} | ${TIME} | Restarting Jormungandr. | Waited ${ELAPSED_TIME} seconds for block." >> ${LOG_FILE}
 
                 # restart service after getting stuck
                 sudo service jorg restart
                 LAST_BLOCK="$LATEST_BLOCK"
+                
+                # take a break while the node bootstraps
                 echo "Sleeping for 90 sec."
                 sleep 90
                 
