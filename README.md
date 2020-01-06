@@ -40,7 +40,15 @@ Once thats done you need to reload the changes: **systemctl daemon-reload && sys
 
 Since Jormungandr (jorg) is a service you need to be sudo to run it and its going to totally ruin your day to come back to your server only to see the monitor is stuck asking for a password to reset jorg. So here is what you need to do, if your user is not already in the sudo group, as root do this: **usermod -aG sudo USERNAME**
 
-Next, youll need to do: **sudo visudo -f /etc/sudoers.d/YOURUSERNAME** This is going to create a file that contains your overrides for the sudo command. In the editor thats opened with the above command put this: **YOURUSERNAME ALL = (root) NOPASSWD: /usr/sbin/service** This will allow you to run the service command without asking for a password. This is only going to let you use that one command without a password, nothing else. 
+Next, youll need to do: 
+
+```sudo visudo -f /etc/sudoers.d/YOURUSERNAME```
+
+This is going to create a file that contains your overrides for the sudo command. In the editor thats opened with the above command put this: 
+
+```YOURUSERNAME ALL = (root) NOPASSWD: /usr/sbin/service```
+
+This will allow you to run the service command without asking for a password. This is only going to let you use that one command without a password, nothing else. 
 
 ### STEP 4: MONITORING & LOGGING
 
