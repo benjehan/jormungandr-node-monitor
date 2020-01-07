@@ -60,14 +60,17 @@ Copy the script to /bin or somewhere in your path. The script outputs to the scr
 
 Here is a sample of the output: 
 
-DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK HEIGHT | BLOCK COUNT SINCE RESTART
+DATE | EPOCH # | SLOT # | TIME SHELLEY EXPLORER GOT THE BLOCK | TIME YOU GOT THE BLOCK | BLOCK HEIGHT | LAST BLOCK HASH | BLOCK COUNT SINCE RESTART
 
 ```
 
-2020-01-05 | Epoch: 22 | Slot: 40742 | Explorer: 17:51:41 | Local: 17:51:56 | Block: 73504 | Count: 4
-2020-01-05 | Epoch: 22 | Slot: 40761 | Explorer: 17:52:19 | Local: 17:52:36 | Block: 73505 | Count: 5
-2020-01-05 | Epoch: 22 | Slot: 40768 | Explorer: 17:52:33 | Local: 17:52:56 | Block: 73506 | Count: 6
-2020-01-05 | Epoch: 22 | Slot: 40787 | Explorer: 17:53:11 | Local: 17:53:16 | Block: 73508 | Count: 7
-2020-01-05 | Epoch: 22 | Slot: 40799 | Explorer: 17:53:35 | Local: 17:53:36 | Block: 73511 | Count: 8
+2020-01-07 | 24 | 13149 | 02:31:55 | 02:32:03 | 077318 | 50ccefce9f | 12
+2020-01-07 | 24 | 13164 | 02:32:25 | 02:32:43 | 077319 | 0728c43b93 | 13
+2020-01-07 | 24 | 13183 | 02:33:03 | 02:33:23 | 077320 | f88705c590 | 14
+2020-01-07 | 24 | 13214 | 02:34:05 | 02:34:23 | 077321 | d2c3d7dea6 | 15
+2020-01-07 | 24 | 13259 | 02:35:35 | 02:35:44 | 077322 | d1ee6ae3f3 | 16
+2020-01-07 | 24 | 13263 | 02:35:43 | 02:36:04 | 077323 | 6006edb4ca | 17
+2020-01-07 | 24 | 13299 | 02:36:55 | 02:37:04 | 077324 | 2e17e8f3e5 | 18
+2020-01-07 | 24 | 13312 | 02:37:21 | 02:37:24 | 077325 | 281f9c63e5 | 19
 
 ```
