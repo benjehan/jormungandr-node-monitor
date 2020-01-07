@@ -97,7 +97,7 @@ do
                 sleep 90
                 
                 # reset counter on restart
-                 echo 0 > $TEMPFILE 
+                 echo 0 > "$TEMPFILE" 
             fi
         fi
     else
