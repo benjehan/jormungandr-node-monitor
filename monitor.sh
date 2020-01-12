@@ -17,18 +17,21 @@
 
 ### CONFIGURATION
 
-# create and reset temp file for counter on startup
-TEMPFILE=/tmp/counter.tmp
-echo 0 > $TEMPFILE  
+# number of blocks to fall behind before restart
+RANGE=10
+
+# block counter set to 0 at startup
+COUNTER=0
 
 # path to jcli
 JCLI="jcli"
 JCLI_PORT=3100
 
 # path to log file
-LOG_FILE=/home/coconut/logs/block.log
+LOG_FILE="/home/coconut/logs/block.log"
 
 # network stuff (dont touch)
+
 LAST_BLOCK=""
 START_TIME=$SECONDS
 
@@ -40,30 +43,43 @@ echo "//////////////////////////////////////////////////////////////////////////
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo ""
-echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | LAST HASH | COUNTER"
+echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | TIP | LAST HASH | COUNTER"
 echo ""
 
 # write headers to log file
 echo "/////////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////" >> ${LOG_FILE}
 echo "/////////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
-echo ""  >> $LOG_FILE}
-echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | LAST HASH | COUNTER" >> ${LOG_FILE}
+echo ""  >> ${LOG_FILE}
+echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | TIP | LAST HASH | COUNTER" >> ${LOG_FILE}
 echo ""  >> ${LOG_FILE}
 
 # start the monitoring
 while true
 do  
     
-    #todays date and time
+    #todays date
     DATE=$(date '+%Y-%m-%d')
-    TIME=$(date '+%H:%M:%S')
+
+    # majority tip
+    MAJOR_TIP=$(curl -s https://pooltool.s3-us-west-2.amazonaws.com/stats/stats.json | jq -r .majoritymax)
+
+    # the time your node got the block
+    TIME=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastReceivedBlockTime | awk '{print $2}' | cut -c 13- | rev | cut -c 8- | rev)
     
-    # info from the node
-    LAST_HASH=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockHash | awk '{print $2}' | cut -c 1-10)
-    LATEST_BLOCK=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockHeight | awk '{print $2}' | rev | cut -c 1- | rev | cut -c 2-)
+    # last block hash 9 chars
+    LAST_HASH=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockHash | awk '{print $2}' | cut -c 1-9)
+    
+    # last block number
+    LATEST_BLOCK=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockHeight | awk '{print $2}' | rev | cut -c 2- | rev | cut -c 2-)
+    
+    # last slot selected 
     LATEST_SLOT=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockDate | awk '{print $2}' | rev | cut -c 2- | rev | cut -c 5- )
+    
+    # the time the last block as registered on the network
     LAST_BLOCK_TIME=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockTime | awk '{print $2}' | cut -c 13- | rev | cut -c 8- | rev)
+    
+    # current epoch number
     EPOCH=$($JCLI rest v0 node stats get --host "http://127.0.0.1:${JCLI_PORT}/api" | grep lastBlockDate | awk '{print $2}' | cut -c -3 | cut -c 2- )
     
     #make it happen
@@ -74,10 +90,24 @@ do
             
             # logging to screen and file
             START_TIME=$(($SECONDS))
-            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | 0${LATEST_BLOCK} | ${LAST_HASH} | ${COUNTER}"
-            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | 0${LATEST_BLOCK} | ${LAST_HASH} | ${COUNTER}" >>  ${BLOCK_LOG}
+    
+         # if a block isnt shown its probably a double block
+        if [ "$LATEST_BLOCK" != $(($LAST_BLOCK+1)) ]; then
+               echo "MULTIPLE BLOCKS CREATED AT BLOCK:  $(($LAST_BLOCK+1))"
+               echo "MULTIPLE BLOCKS CREATED AT BLOCK:  $(($LAST_BLOCK+1))" >> ${LOG_FILE}
+            fi
+    
+         # restart is the node gets too far behind the major_tip 
+         if [ "$LATEST_BLOCK" -lt $(($MAJOR_TIP-$RANGE)) ]; then
+            echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE."
+            echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE." >> ${LOG_FILE}
+            sudo service jorg restart
+         fi
+
+            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | ${LATEST_BLOCK} | ${MAJOR_TIP} | ${LAST_HASH} | ${COUNTER}"
+            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | ${LATEST_BLOCK} | ${MAJOR_TIP} | ${LAST_HASH} | ${COUNTER}" >> ${LOG_FILE}
             LAST_BLOCK="$LATEST_BLOCK"
-        else
+ else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
             if [ "$ELAPSED_TIME" -gt "$RESTART_GT" ]; then
                
@@ -91,13 +121,14 @@ do
                 # restart service after getting stuck
                 sudo service jorg restart
                 LAST_BLOCK="$LATEST_BLOCK"
+
+                # reset counter on restart
+                COUNTER=0
                 
                 # take a break while the node bootstraps
                 echo "Sleeping for 90 sec."
                 sleep 90
                 
-                # reset counter on restart
-                 echo 0 > "$TEMPFILE" 
             fi
         fi
     else
