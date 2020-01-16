@@ -90,8 +90,8 @@ do
     
          # if a block isnt shown its probably a double block
         if [ "$LATEST_BLOCK" != $(($LAST_BLOCK+1)) ]; then
-               echo "MULTIPLE BLOCKS CREATED AT BLOCK:  $(($LAST_BLOCK+1))"
-               echo "MULTIPLE BLOCKS CREATED AT BLOCK:  $(($LAST_BLOCK+1))" >> ${LOG_FILE}
+               echo "POSSIBLE MULTIPLE BLOCKS CREATED AT BLOCK:  $(($LAST_BLOCK+1))"
+               echo "POSSIBLE MULTIPLE BLOCKS CREATED AT BLOCK:  $(($LAST_BLOCK+1))" >> ${LOG_FILE}
             fi
     
          # restart is the node gets too far behind the major_tip 
