@@ -17,9 +17,6 @@
 
 ### CONFIGURATION
 
-# number of blocks to fall behind before restart
-RANGE=10
-
 # block counter set to 0 at startup
 COUNTER=0
 
@@ -28,7 +25,7 @@ JCLI="jcli"
 JCLI_PORT=3100
 
 # path to log file
-LOG_FILE="/home/coconut/logs/block.log"
+LOG_FILE="/home/coconut/logs/stuck.log"
 
 # network stuff (dont touch)
 
@@ -36,14 +33,14 @@ LAST_BLOCK=""
 START_TIME=$SECONDS
 
 # how many seconds should we wait if no blocks show up
-RESTART_GT=180
+RESTART_GT=1360
 
 # display output headers
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo ""
-echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | TIP | LAST HASH | COUNTER"
+echo "TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOCAL | H: CONS | LAST HASH | COUNTER"
 echo ""
 
 # write headers to log file
@@ -51,7 +48,7 @@ echo "//////////////////////////////////////////////////////////////////////////
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////" >> ${LOG_FILE}
 echo "/////////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
 echo ""  >> ${LOG_FILE}
-echo "TODAY DATE | EP | SLOT# | EXP TIME | LOC TIME | HEIGHT | TIP | LAST HASH | COUNTER" >> ${LOG_FILE}
+echo "TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOCAL | H: CONS | LAST HASH | COUNTER" >> ${LOG_FILE}
 echo ""  >> ${LOG_FILE}
 
 # start the monitoring
@@ -98,14 +95,17 @@ do
             fi
     
          # restart is the node gets too far behind the major_tip 
-         if [ "$LATEST_BLOCK" -lt $(($MAJOR_TIP-$RANGE)) ]; then
+         if [ "$LATEST_BLOCK" -lt $(($MAJOR_TIP-10)) ]; then
             echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE."
             echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE." >> ${LOG_FILE}
             sudo service jorg restart
          fi
+        shelleyExplorerJson=`curl -X POST -H "Content-Type: application/json" --data '{"query": " query {   allBlocks (last: 3) {    pageInfo { hasNextPage hasPreviousPage startCursor endCursor  }  totalCount  edges {    node {     id  date { slot epoch {  id  firstBlock { id  }  lastBlock { id  }  totalBlocks }  }  transactions { totalCount edges {   node {    id  block { id date {   slot   epoch {    id  firstBlock { id  }  lastBlock { id  }  totalBlocks   } } leader {   __typename   ... on Pool {    id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  }   } }  }  inputs { amount address {   id }  }  outputs { amount address {   id }  }   }   cursor }  }  previousBlock { id  }  chainLength  leader { __typename ... on Pool {  id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  } }  }    }    cursor  }   } }  "}' https://explorer.incentivized-testnet.iohkdev.io/explorer/graphql 2> /dev/null`
+        shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -m 1 -o '"chainLength":"[^"]*' | cut -d'"' -f4 | awk '{print $NF}'`
+        shelleyLastBlockCount=`echo $shelleyLastBlockCount|cut -d ' ' -f3`
 
-            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | ${LATEST_BLOCK} | ${MAJOR_TIP} | ${LAST_HASH} | ${COUNTER}"
-            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | ${LATEST_BLOCK} | ${MAJOR_TIP} | ${LAST_HASH} | ${COUNTER}" >> ${LOG_FILE}
+            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | ${shelleyLastBlockCount} | ${LATEST_BLOCK} | ${MAJOR_TIP} | ${LAST_HASH} | ${COUNTER}"
+            echo "${DATE} | ${EPOCH} | ${LATEST_SLOT} | ${LAST_BLOCK_TIME} | ${TIME} | ${shelleyLastBlockCount} | ${LATEST_BLOCK} | ${MAJOR_TIP} | ${LAST_HASH} | ${COUNTER}" >> ${LOG_FILE}
             LAST_BLOCK="$LATEST_BLOCK"
  else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
@@ -126,15 +126,15 @@ do
                 COUNTER=0
                 
                 # take a break while the node bootstraps
-                echo "Sleeping for 90 sec."
-                sleep 90
+                echo "Waiting for Jormungandr to Bootstrap.. (this coule be awhile)"
+                sleep 45
                 
             fi
         fi
     else
         # there is no connection to the node
-        echo "Unable to connect to Jormungandr."
-        
+        echo "Waiting.."
+        COUNTER=0
         # Reset time
         START_TIME=$(($SECONDS))
     fi
