@@ -60,6 +60,8 @@ Copy the script to /bin or somewhere in your path. The script outputs to the scr
 
 Here is a sample of the output: 
 
+```
+
 EP: Epoch
 SLOT#: Current Slot
 T: EXPLR: Last Block Time @ Shelley Explorer
@@ -70,7 +72,7 @@ H: CONS: Consensus Chain Height @ Pooltool.io
 LAST HASH: Last Block Hash
 COUNTER: Events since last reset
 
-```
+
 TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOCAL | H: CONS | LAST HASH | COUNTER
 
 2020-01-16 | 33 | 39077 | 16:56:11 | 16:56:12 | 103921 | 103995 | 103993 | 5ebce2822 | 11
