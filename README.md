@@ -60,15 +60,22 @@ Copy the script to /bin or somewhere in your path. The script outputs to the scr
 
 Here is a sample of the output: 
 
-```
-DATE | EPOCH | SLOT | E:TIME | U:TIME | U:TIP | M:TIP | LAST HASH | BLOCKS SINCE RESTART
+EP: Epoch
+SLOT#: Current Slot
+T: EXPLR: Last Block Time @ Shelley Explorer
+T: LOCAL: Last Block Time @ localhost
+H: SHL: Shelley Chain Height
+H: LOCAL: Local Chain Height
+H: CONS: Consensus Chain Height @ Pooltool.io
+LAST HASH: Last Block Hash
+COUNTER: Events since last reset
 
-2020-01-12 | 29 | 41407 | 18:13:51 | 18:13:54 | 93024 | 93021 | 32a974e89 | 4
-MULTIPLE BLOCKS CREATED AT BLOCK:  93025
-2020-01-12 | 29 | 41422 | 18:14:21 | 18:14:22 | 93026 | 93024 | ddacbdf63 | 5
-2020-01-12 | 29 | 41438 | 18:14:53 | 18:15:02 | 93027 | 93024 | 4563e0a46 | 6
-2020-01-12 | 29 | 41447 | 18:15:11 | 18:15:15 | 93028 | 93027 | 553234e16 | 7
-2020-01-12 | 29 | 41460 | 18:15:37 | 18:15:38 | 93029 | 93027 | 76887bb79 | 8
-2020-01-12 | 29 | 41481 | 18:16:19 | 18:16:23 | 93030 | 93029 | 0e3b21545 | 9
+```
+TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOCAL | H: CONS | LAST HASH | COUNTER
+
+2020-01-16 | 33 | 39077 | 16:56:11 | 16:56:12 | 103921 | 103995 | 103993 | 5ebce2822 | 11
+2020-01-16 | 33 | 39084 | 16:56:25 | 16:56:35 | 103989 | 103996 | 103993 | 0686b34da | 12
+2020-01-16 | 33 | 39098 | 16:56:53 | 16:57:00 | 103921 | 103997 | 103993 | 9ed653fd9 | 13
+2020-01-16 | 33 | 39144 | 16:58:25 | 16:58:49 | 103989 | 103998 | 103997 | 5ff6f6685 | 14
 
 ```
