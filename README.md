@@ -68,12 +68,12 @@ T: EXPLR: Last Block Time @ Shelley Explorer
 T: LOCAL: Last Block Time @ localhost
 H: SHL: Shelley Chain Height
 H: LOC: Local Chain Height
-H: CONS: Consensus Chain Height @ Pooltool.io
+H: CON: Consensus Chain Height @ Pooltool.io
 LAST HASH: Last Block Hash
 COUNTER: Events since last reset
 
 
-TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOC | H: CONS | LAST HASH | COUNTER
+TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOC | H: CON | LAST HASH | COUNTER
 
 2020-01-16 | 33 | 39077 | 16:56:11 | 16:56:12 | 103921 | 103995 | 103993 | 5ebce2822 | 11
 2020-01-16 | 33 | 39084 | 16:56:25 | 16:56:35 | 103989 | 103996 | 103993 | 0686b34da | 12
