@@ -40,7 +40,7 @@ echo "//////////////////////////////////////////////////////////////////////////
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo ""
-echo "TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOCAL | H: CONS | LAST HASH | COUNTER"
+echo "TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOC | H: CON | LAST HASH | COUNTER"
 echo ""
 
 # write headers to log file
@@ -48,7 +48,7 @@ echo "//////////////////////////////////////////////////////////////////////////
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////" >> ${LOG_FILE}
 echo "/////////////////////////////////////////////////////////////////////////////////////" >> ${LOG_FILE}
 echo ""  >> ${LOG_FILE}
-echo "TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOCAL | H: CONS | LAST HASH | COUNTER" >> ${LOG_FILE}
+echo "TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOC | H: CON | LAST HASH | COUNTER" >> ${LOG_FILE}
 echo ""  >> ${LOG_FILE}
 
 # start the monitoring
