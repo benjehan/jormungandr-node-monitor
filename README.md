@@ -67,7 +67,7 @@ SLOT#: Current Slot
 T: EXPLR: Last Block Time @ Shelley Explorer
 T: LOCAL: Last Block Time @ localhost
 H: SHL: Shelley Chain Height
-H: LOCAL: Local Chain Height
+H: LOC: Local Chain Height
 H: CONS: Consensus Chain Height @ Pooltool.io
 LAST HASH: Last Block Hash
 COUNTER: Events since last reset
