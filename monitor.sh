@@ -51,8 +51,8 @@ echo "//////////////////////////////////////////////////////////////////////////
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo ""
-printf "DATE \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t SHLLY \t LOCAL \t POOLTL \t HASH \t FORK \t COUNT \n"
-printf "DATE \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t SHLLY \t LOCAL \t POOLTL \t HASH \t FORK \t COUNT \n" >> ${LOG_FILE}
+printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t SHLLY \t LOCAL \t POOLTL \t HASH \t FORK \t COUNT \n"
+printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t SHLLY \t LOCAL \t POOLTL \t HASH \t FORK \t COUNT \n" >> ${LOG_FILE}
 echo ""
 
 # start the monitoring
