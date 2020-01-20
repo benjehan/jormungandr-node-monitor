@@ -71,6 +71,7 @@ Here is a sample of the output:
 
 ```
 DATE: Today's date
+COUNT: Events since last reset (not shown for space reasons)
 EP: Epoch
 SLOT: Current Slot
 EXP. TIME: Last Block Time @ Shelley Explorer
@@ -83,7 +84,7 @@ BX: Blocks behind Shelley Explorer
 BP: Blocks Behind PoolTool.io consensus tip
 HASH: Last Block Hash
 FORK: Possible fork on this block (number of blocks created)
-COUNT: Events since last reset (not shown for space reasons)
+CPU: CPU usage at time of block production/reciept (not shown)
 
 "------" or "--" means there are no differences or changes the values is equal to zero.
 
