@@ -16,7 +16,6 @@
 #
 
 ### CONFIGURATION
-# set tab spacing
 tabs 5
 
 # number of blocks behind consesnsus tip before restarting
@@ -109,15 +108,25 @@ do
         # get last block count from shelley explorer
         shelleyExplorerJson=`curl -X POST -H "Content-Type: application/json" --data '{"query": " query {   allBlocks (last: 3) {    pageInfo { hasNextPage hasPreviousPage startCursor endCursor  }  totalCount  edges {    node {     id  date { slot epoch {  id  firstBlock { id  }  lastBlock { id  }  totalBlocks }  }  transactions { totalCount edges {   node {    id  block { id date {   slot   epoch {    id  firstBlock { id  }  lastBlock { id  }  totalBlocks   } } leader {   __typename   ... on Pool {    id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  }   } }  }  inputs { amount address {   id }  }  outputs { amount address {   id }  }   }   cursor }  }  previousBlock { id  }  chainLength  leader { __typename ... on Pool {  id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  } }  }    }    cursor  }   } }  "}' https://explorer.incentivized-testnet.iohkdev.io/explorer/graphql 2> /dev/null`
         shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -m 1 -o '"chainLength":"[^"]*' | cut -d'"' -f4 | awk '{print $NF}'`
-        shelleyLastBlockCount=`echo $shelleyLastBlockCount|cut -d ' ' -f3`
+        shelleyLastBlockCount=`echo $shelleyLastBlockCount | cut -d ' ' -f3`
+       
+       #if we cant reach the shelley explorer
+        if [ -z $shelleyLastBlockCount ]; then
+
+          shelleyLastBlockCount="-----"
+       fi
 
         # calculate time difference between shelley and local
         SBT=$(date -d "${LAST_BLOCK_TIME} ${DATE}" +%s)
         LBT=$(date -d "${TIME} ${DATE}" +%s)
-        TDIFF=$(($SBT-$LBT))
+        TDIFF="$(($SBT-$LBT))s"
+      
+      if [ $TDIFF == "0s" ]; then
+      TDIFF="-----"
+      fi
 
-            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF}s \t ${shelleyLastBlockCount} \t ${LATEST_BLOCK} \t ${MAJOR_TIP} \t ${LAST_HASH} \t ${MULTIBLOCK} \t ${COUNTER} \n"
-            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF}s \t ${shelleyLastBlockCount} \t ${LATEST_BLOCK} \t ${MAJOR_TIP} \t ${LAST_HASH} \t ${MULTIBLOCK} \t ${COUNTER} \n" >> ${LOG_FILE}
+            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${shelleyLastBlockCount} \t ${LATEST_BLOCK} \t ${MAJOR_TIP} \t ${LAST_HASH} \t ${MULTIBLOCK} \t ${COUNTER} \n"
+            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${shelleyLastBlockCount} \t ${LATEST_BLOCK} \t ${MAJOR_TIP} \t ${LAST_HASH} \t ${MULTIBLOCK} \t ${COUNTER} \n" >> ${LOG_FILE}
             LAST_BLOCK="$LATEST_BLOCK"
  else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
