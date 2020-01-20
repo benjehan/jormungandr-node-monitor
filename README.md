@@ -70,7 +70,8 @@ DIFFS: Time difference between shelley explorer getting the block and when your 
 SHLLY: Shelley Chain Height
 LOCAL Local Chain Height
 POOLTL: Consensus Chain Height @ Pooltool.io
-LAST HASH: Last Block Hash
+HASH: Last Block Hash
+FORK: Possible fork on this block (multiple blocks created)
 CNT: Events since last reset
 
 
