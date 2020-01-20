@@ -65,7 +65,7 @@ This will allow you to run the service command without asking for a password. Th
 
 Copy the script to /bin or somewhere in your path. The script outputs to the screen and runs in a loop. It also outputs the same info to a log file so you can review it later. You will want to edit the **${LOG_FILE}** variable to set where to store your logs. The script will run until you stop it.
 
-```**THE FIRST LINE OF OUTPUT WHEN THE START THE SCRIPT IS GARBAGE, IGNORE IT. PAY NO ATTENTION TO IT. MOVE ALONG TO LINE TWO**.``` 
+**THE FIRST LINE OF OUTPUT WHEN THE START THE SCRIPT IS GARBAGE, IGNORE IT. PAY NO ATTENTION TO IT. MOVE ALONG TO LINE TWO.**
 
 Here is a sample of the output: 
 
@@ -76,12 +76,16 @@ SLOT: Current Slot
 EXP. TIME: Last Block Time @ Shelley Explorer
 LOCAL TIME: Last Block Time @ localhost
 DIFFS: Time difference between shelley explorer getting the block and when your node got the block
-SHLLY: Shelley Chain Height
-LOCAL Local Chain Height
+HEIGHT: Local Chain Height
+SHLXPR: Shelley Chain Height
 POOLTL: Consensus Chain Height @ Pooltool.io
+BX: Blocks behind Shelley Explorer
+BP: Blocks Behind PoolTool.io consensus tip
 HASH: Last Block Hash
-FORK: Possible fork on this block (multiple blocks created)
-CNT: Events since last reset
+FORK: Possible fork on this block (number of blocks created)
+COUNT: Events since last reset (not shown for space reasons)
+
+"------" or "--" means there are no differences or changes the values is equal to zero.
 
 ===DATE===      EP   SLOT      EXP. TIME      LOCAL TIME     DIFFS     HEIGHT    SHLXPR    POOLTL    BX   BP   HASH     FORK
 2020-01-20      37   41426     18:14:29       18:14:29       ------    115781    115781    115780    0    -1   8b941     000 
