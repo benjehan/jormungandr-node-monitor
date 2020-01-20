@@ -10,17 +10,12 @@
 #  deployment, and is solely used for learning how the node and blockchain
 #  works, and how to interact with everything.
 #
-#
-# Requirements:
-# 
-# SQlite3 (sudo apt install sqlite3)
-#
 # Notes:
 #
 # Jormungandr must be running as a service in order for the node to be reset.
 #
 
-### CONFIGURATION
+#### CONFIGURATION
 tabs 5
 
 # number of blocks behind consesnsus tip before restarting
@@ -52,19 +47,25 @@ START_TIME=$SECONDS
 # i like about 6 minutes
 RESTART_GT=3600
 
+# starting value of cpu use percent
+CPU_USE=0
+
 # display output headers
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo ""
-printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t HEIGHT \t SHLXPR \t POOLTL \t BX \t BP \t HASH \t FORK \t COUNTER \n"
-printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t HEIGHT \t SHLXPR \t POOLTL \t BX \t BP \t HASH \t FORK \t COUNTER \n" >> ${LOG_FILE}
+printf "===DATE=== \t # \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t HASH \t HEIGHT \t SHLXPR \t POOLTL \t BX \t BP \t BLKS \t CPU\n"
+printf "===DATE=== \t # \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t HASH \t HEIGHT \t SHLXPR \t POOLTL \t BX \t BP \t BLKS \t CPU\n" >> ${LOG_FILE}
 echo ""
 
 # start the monitoring
 while true
 do  
     
+    # get cpu use for each cycle
+    CPU_USE=$(top -bn 2 -d 0.01 | grep '^%Cpu' | tail -n 1 | gawk '{print $2+$4+$6}')
+
     # multiple blocks starting state
     MULTIBLOCK="0"
 
@@ -102,10 +103,8 @@ do
     
            # forks
            FORK_NUMBER=$(sqlite3 ${BLOCK_FILE} "select depth from BlockInfo;" | grep $LAST_BLOCK | wc -l)
-           if [ $FORK_NUMBER -gt 1 ]; then
            MULTIBLOCK=$FORK_NUMBER
-           fi
-         
+                    
          # restart is the node gets too far behind the major_tip 
          if [ "$LATEST_BLOCK" -lt $(($MAJOR_TIP-$GET_BEHIND)) ]; then
             echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE."
@@ -135,15 +134,15 @@ do
 
       # if no results pad space
       if [ $TDIFF == "0s" ]; then
-      TDIFF="------"
+      TDIFF="0s   "
       fi
       
       if [ $shelleyLastBlockCount == "------" ]; then
       BEHIND_SHELLEY="--"
       fi
             # monitoring  output to screen and file
-            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${LATEST_BLOCK} \t ${shelleyLastBlockCount} \t ${MAJOR_TIP} \t ${BEHIND_SHELLEY} \t ${BEHIND_POOLTOOL} \t ${LAST_HASH} \t 00${MULTIBLOCK} \t ${COUNTER} \n"
-            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${LATEST_BLOCK} \t ${shelleyLastBlockCount} \t ${MAJOR_TIP} \t ${BEHIND_SHELLEY} \t ${BEHIND_POOLTOOL} \t ${LAST_HASH} \t 00${MULTIBLOCK} \t ${COUNTER} \n" >> ${LOG_FILE}
+            printf "${DATE} \t ${COUNTER} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${LAST_HASH} \t ${LATEST_BLOCK} \t ${shelleyLastBlockCount} \t ${MAJOR_TIP} \t ${BEHIND_SHELLEY} \t ${BEHIND_POOLTOOL} \t %03d${MULTIBLOCK} \t ${CPU_USE} \n"
+            printf "${DATE} \t ${COUNTER} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${LAST_HASH} \t ${LATEST_BLOCK} \t ${shelleyLastBlockCount} \t ${MAJOR_TIP} \t ${BEHIND_SHELLEY} \t ${BEHIND_POOLTOOL} \t ${MULTIBLOCK} \t ${CPU_USE}\n" >> ${LOG_FILE}
             LAST_BLOCK="$LATEST_BLOCK"
  else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
