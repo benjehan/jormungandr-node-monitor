@@ -83,7 +83,7 @@ POOLTL: Consensus Chain Height @ Pooltool.io
 BX: Blocks behind Shelley Explorer
 BP: Blocks Behind PoolTool.io consensus tip
 HASH: Last Block Hash
-FORK: Possible fork on this block (number of blocks created)
+BLKS: Number of blocks produced at this height (more than 1 is a fork)
 CPU: CPU usage at time of block production/reciept (not shown)
 
 "------" or "--" means there are no differences or changes the values is equal to zero.
