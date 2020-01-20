@@ -10,6 +10,11 @@
 #  deployment, and is solely used for learning how the node and blockchain
 #  works, and how to interact with everything.
 #
+#
+# Requirements:
+# 
+# SQlite3 (sudo apt install sqlite3)
+#
 # Notes:
 #
 # Jormungandr must be running as a service in order for the node to be reset.
@@ -25,7 +30,6 @@ GET_BEHIND=100
 # dont change this or else the world will end
 COUNTER=0
 
-
 # path to jcli
 JCLI="jcli"
 JCLI_PORT=3100
@@ -33,10 +37,13 @@ JCLI_PORT=3100
 # path to log file
 LOG_FILE="/home/coconut/logs/stuck.log"
 
+# path to jormungandr sqlite blocks database
+BLOCK_FILE="/home/coconut/blocks/jormungandr/blocks.sqlite"
+
 # network stuff
 # if you change this, oh man, its gonna be bad
 
-LAST_BLOCK=""
+LAST_BLOCK="0"
 
 # time stuff
 START_TIME=$SECONDS
@@ -50,8 +57,8 @@ echo "//////////////////////////////////////////////////////////////////////////
 echo "///////////////////////// JORMUNGANDR NODE MONITOR //////////////////////////////////"
 echo "/////////////////////////////////////////////////////////////////////////////////////"
 echo ""
-printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t SHLLY \t LOCAL \t POOLTL \t HASH \t FORK \t COUNT \n"
-printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t SHLLY \t LOCAL \t POOLTL \t HASH \t FORK \t COUNT \n" >> ${LOG_FILE}
+printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t HEIGHT \t SHLXPR \t POOLTL \t BX \t BP \t HASH \t FORK \t COUNTER \n"
+printf "===DATE=== \t EP \t SLOT \t EXP. TIME \t LOCAL TIME \t DIFFS \t HEIGHT \t SHLXPR \t POOLTL \t BX \t BP \t HASH \t FORK \t COUNTER \n" >> ${LOG_FILE}
 echo ""
 
 # start the monitoring
@@ -59,7 +66,7 @@ while true
 do  
     
     # multiple blocks starting state
-    MULTIBLOCK="NO "
+    MULTIBLOCK="0"
 
     #todays date
     DATE=$(date '+%Y-%m-%d')
@@ -93,40 +100,50 @@ do
             # logging to screen and file
             START_TIME=$(($SECONDS))
     
-         # if a block isnt shown its probably a double block
-        if [ "$LATEST_BLOCK" != $(($LAST_BLOCK+1)) ]; then
-               
-               MULTIBLOCK="YES"
-        fi
-    
+           # forks
+           FORK_NUMBER=$(sqlite3 ${BLOCK_FILE} "select depth from BlockInfo;" | grep $LAST_BLOCK | wc -l)
+           if [ $FORK_NUMBER -gt 1 ]; then
+           MULTIBLOCK=$FORK_NUMBER
+           fi
+         
          # restart is the node gets too far behind the major_tip 
          if [ "$LATEST_BLOCK" -lt $(($MAJOR_TIP-$GET_BEHIND)) ]; then
             echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE."
             echo "TOO FAR BEHIND MAJOR TIP. RESTARTING NODE." >> ${LOG_FILE}
             sudo service jorg restart
          fi
+
         # get last block count from shelley explorer
         shelleyExplorerJson=`curl -X POST -H "Content-Type: application/json" --data '{"query": " query {   allBlocks (last: 3) {    pageInfo { hasNextPage hasPreviousPage startCursor endCursor  }  totalCount  edges {    node {     id  date { slot epoch {  id  firstBlock { id  }  lastBlock { id  }  totalBlocks }  }  transactions { totalCount edges {   node {    id  block { id date {   slot   epoch {    id  firstBlock { id  }  lastBlock { id  }  totalBlocks   } } leader {   __typename   ... on Pool {    id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  }   } }  }  inputs { amount address {   id }  }  outputs { amount address {   id }  }   }   cursor }  }  previousBlock { id  }  chainLength  leader { __typename ... on Pool {  id  blocks { totalCount  }  registration { startValidity managementThreshold owners operators rewards {   fixed   ratio {  numerator  denominator   }   maxLimit } rewardAccount {   id }  } }  }    }    cursor  }   } }  "}' https://explorer.incentivized-testnet.iohkdev.io/explorer/graphql 2> /dev/null`
         shelleyLastBlockCount=`echo $shelleyExplorerJson | grep -m 1 -o '"chainLength":"[^"]*' | cut -d'"' -f4 | awk '{print $NF}'`
         shelleyLastBlockCount=`echo $shelleyLastBlockCount | cut -d ' ' -f3`
        
-       #if we cant reach the shelley explorer
-        if [ -z $shelleyLastBlockCount ]; then
-
-          shelleyLastBlockCount="-----"
-       fi
-
         # calculate time difference between shelley and local
         SBT=$(date -d "${LAST_BLOCK_TIME} ${DATE}" +%s)
         LBT=$(date -d "${TIME} ${DATE}" +%s)
         TDIFF="$(($SBT-$LBT))s"
-      
-      if [ $TDIFF == "0s" ]; then
-      TDIFF="-----"
-      fi
 
-            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${shelleyLastBlockCount} \t ${LATEST_BLOCK} \t ${MAJOR_TIP} \t ${LAST_HASH} \t ${MULTIBLOCK} \t ${COUNTER} \n"
-            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${shelleyLastBlockCount} \t ${LATEST_BLOCK} \t ${MAJOR_TIP} \t ${LAST_HASH} \t ${MULTIBLOCK} \t ${COUNTER} \n" >> ${LOG_FILE}
+       #if we cant reach the shelley explorer
+        if [ -z $shelleyLastBlockCount ]; then
+          shelleyLastBlockCount="------"
+       fi
+
+      
+        # block difference
+        BEHIND_SHELLEY=$(($shelleyLastBlockCount - $LATEST_BLOCK))
+        BEHIND_POOLTOOL=$(($MAJOR_TIP - $LATEST_BLOCK))
+
+      # if no results pad space
+      if [ $TDIFF == "0s" ]; then
+      TDIFF="------"
+      fi
+      
+      if [ $shelleyLastBlockCount == "------" ]; then
+      BEHIND_SHELLEY="--"
+      fi
+            # monitoring  output to screen and file
+            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${LATEST_BLOCK} \t ${shelleyLastBlockCount} \t ${MAJOR_TIP} \t ${BEHIND_SHELLEY} \t ${BEHIND_POOLTOOL} \t ${LAST_HASH} \t 00${MULTIBLOCK} \t ${COUNTER} \n"
+            printf "${DATE} \t ${EPOCH} \t ${LATEST_SLOT} \t ${LAST_BLOCK_TIME} \t ${TIME} \t ${TDIFF} \t ${LATEST_BLOCK} \t ${shelleyLastBlockCount} \t ${MAJOR_TIP} \t ${BEHIND_SHELLEY} \t ${BEHIND_POOLTOOL} \t ${LAST_HASH} \t 00${MULTIBLOCK} \t ${COUNTER} \n" >> ${LOG_FILE}
             LAST_BLOCK="$LATEST_BLOCK"
  else
             ELAPSED_TIME=$(($SECONDS - $START_TIME))
@@ -161,5 +178,6 @@ do
     fi
     sleep 20
 done
+
 
 exit 0
