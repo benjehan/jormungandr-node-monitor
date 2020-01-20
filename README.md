@@ -66,6 +66,7 @@ EP: Epoch
 SLOT: Current Slot
 EXP. TIME: Last Block Time @ Shelley Explorer
 LOCAL TIME: Last Block Time @ localhost
+DIFFS: Time difference between shelley explorer getting the block and when your node got the block
 SHLLY: Shelley Chain Height
 LOCAL Local Chain Height
 POOLTL: Consensus Chain Height @ Pooltool.io
