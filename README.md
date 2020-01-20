@@ -61,23 +61,36 @@ Copy the script to /bin or somewhere in your path. The script outputs to the scr
 Here is a sample of the output: 
 
 ```
-
+DATE: Today's date
 EP: Epoch
-SLOT#: Current Slot
-T: EXPLR: Last Block Time @ Shelley Explorer
-T: LOCAL: Last Block Time @ localhost
-H: SHL: Shelley Chain Height
-H: LOC: Local Chain Height
-H: CON: Consensus Chain Height @ Pooltool.io
+SLOT: Current Slot
+EXP. TIME: Last Block Time @ Shelley Explorer
+LOCAL TIME: Last Block Time @ localhost
+SHLLY: Shelley Chain Height
+LOCAL Local Chain Height
+POOLTL: Consensus Chain Height @ Pooltool.io
 LAST HASH: Last Block Hash
-COUNTER: Events since last reset
+CNT: Events since last reset
 
 
-TODAY DATE | EP | SLOT# | T: EXPLR | T: LOCAL | H: SHL | H: LOC | H: CON | LAST HASH | COUNTER
+===DATE===      EP   SLOT      EXP. TIME      LOCAL TIME     DIFFS     SHLLY     LOCAL     POOLTL    HASH      FORK     CNT 
+2020-01-20      37   17628     05:01:13       05:01:18       -5s       114050    114050    114048    2f9cb     NO        127
+2020-01-20      37   17657     05:02:11       05:02:12       -1s       114050    114051    114050    1424b     NO        128
+2020-01-20      37   17674     05:02:45       05:02:48       -3s       114054    114054    114050    6dddd     YES       129
+2020-01-20      37   17683     05:03:03       05:03:07       -4s       114055    114055    114054    a102f     NO        130
+2020-01-20      37   17691     05:03:19       05:03:29       -10s      114050    114056    114054    1c23b     NO        131
+2020-01-20      37   17693     05:03:23       05:03:39       -16s      114052    114057    114054    2cb7e     NO        132
+2020-01-20      37   17713     05:04:03       05:04:07       -4s       114058    114058    114057    a5392     NO        133
+2020-01-20      37   17739     05:04:55       05:04:58       -3s       114057    114060    114059    c5b3c     YES       134
+2020-01-20      37   17802     05:07:01       05:07:08       -7s       114061    114061    114060    7e0dc     NO        135
+2020-01-20      37   17842     05:08:21       05:08:21       -----     114065    114064    114063    31e63     YES       136
+2020-01-20      37   17849     05:08:35       05:08:38       -3s       114062    114066    114063    3881d     YES       137
+2020-01-20      37   17892     05:10:01       05:10:06       -5s       114069    114069    114067    8c2ac     YES       138
+2020-01-20      37   17912     05:10:41       05:10:43       -2s       114065    114070    114068    d82ce     NO        139
+2020-01-20      37   18024     05:14:25       05:14:31       -6s       114072    114072    114070    9a5bc     YES       140
+2020-01-20      37   18031     05:14:39       05:14:43       -4s       114073    114073    114070    26651     NO        141
+2020-01-20      37   18072     05:16:01       05:16:02       -1s       114075    114075    114074    1b980     YES       142
+2020-01-20      37   18087     05:16:31       05:16:32       -1s       114076    114076    114074    3ffa8     NO        143
 
-2020-01-16 | 33 | 39077 | 16:56:11 | 16:56:12 | 103921 | 103995 | 103993 | 5ebce2822 | 11
-2020-01-16 | 33 | 39084 | 16:56:25 | 16:56:35 | 103989 | 103996 | 103993 | 0686b34da | 12
-2020-01-16 | 33 | 39098 | 16:56:53 | 16:57:00 | 103921 | 103997 | 103993 | 9ed653fd9 | 13
-2020-01-16 | 33 | 39144 | 16:58:25 | 16:58:49 | 103989 | 103998 | 103997 | 5ff6f6685 | 14
 
 ```
