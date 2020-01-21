@@ -80,8 +80,8 @@ DIFFS: Time difference between shelley explorer getting the block and when your 
 HEIGHT: Local Chain Height
 SHLXPR: Shelley Chain Height
 POOLTL: Consensus Chain Height @ Pooltool.io
-BX: Blocks behind Shelley Explorer
-BP: Blocks Behind PoolTool.io consensus tip
+BX: Blocks behind Shelley Explorer - Negative number means your ahead of the explorer and positive number means your behind.
+BP: Blocks Behind PoolTool.io consensus tip - Negative number means your ahead of PoolTool and positive number means your behind.
 HASH: Last Block Hash
 BLKS: Number of blocks produced at this height (more than 1 is a fork)
 CPU: CPU usage at time of block production/reciept (not shown)
